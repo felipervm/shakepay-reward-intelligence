@@ -24,10 +24,11 @@ Python 3.10+ and Node.js 18+ are sufficient. No installed packages are needed fo
 python analysis.py
 python -m unittest discover -s tests -v
 npm test
-python -m http.server 8000
 ```
 
-Open http://localhost:8000/. Jupyter is optional; see requirements.txt. The notebook assumes its working directory is notebooks/.
+Open the published study: https://felipervm.github.io/shakepay-reward-intelligence/
+
+Jupyter is optional; see requirements.txt. The notebook assumes its working directory is notebooks/.
 
 ## Scope
 
