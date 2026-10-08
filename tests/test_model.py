@@ -1,9 +1,16 @@
 """Run from repository root: python -m unittest discover -s tests -v"""
 import unittest
-from model import expected_tier,earned_tier,reconcile
+from model import expected_tier,earned_tier,reconcile,RULES
 def e(kind,amt,when="2026-10-04",settled=True):
     return {"kind":kind,"amount_cad":amt,"date":when,"settled":settled}
 class Rewards(unittest.TestCase):
+    def test_policy_thresholds_match_sql(self):
+        from pathlib import Path
+        sql=(Path(__file__).resolve().parent.parent/"sql/eligibility_audit.sql").read_text()
+        for kind, column in [("eligible_direct_deposit","direct_cents"),("eligible_exchange","exchange_cents")]:
+            for tier in ["Bright","Blue"]:
+                value=RULES["thresholds_cad"][kind][tier]*100
+                self.assertIn(f"{column}>={value}",sql)
     def test_direct_bright(self): self.assertEqual(expected_tier([e("payroll",200)],"2026-10-10"),"Bright")
     def test_direct_blue(self): self.assertEqual(expected_tier([e("payroll",2000)],"2026-10-10"),"Blue")
     def test_exchange_bright(self): self.assertEqual(expected_tier([e("exchange",100)],"2026-10-10"),"Bright")
