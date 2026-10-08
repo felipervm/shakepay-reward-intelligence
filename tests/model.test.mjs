@@ -10,3 +10,14 @@ test('independent qualification paths',()=>assert.equal(evaluate([{date:'2026-10
 
 test('unrecognized category needs review',()=>{const r=evaluate([{date:'2026-10-01',kind:'new_payment_channel',settled:true,amount_cad:'2000'}],'Base','2026-10-08');assert.equal(r.assessment,'INCOMPLETE_DATA');assert.equal(r.mismatch,null);});
 test('confirmed Blue cannot increase even with unknown activity',()=>{const r=evaluate([{date:'2026-10-01',kind:'payroll',settled:true,amount_cad:'2000'},{date:'2026-10-01',kind:'novel',settled:true,amount_cad:'2000'}],'Blue','2026-10-08');assert.equal(r.confirmed_floor,'Blue');assert.equal(r.potential_higher_tier,false);});
+
+test('browser threshold constants agree with published JSON snapshot',()=>{
+ const rules=JSON.parse(readFileSync(new URL('../rules/reward_status_v1.json',import.meta.url)));
+ const source=readFileSync(new URL('../site/model-utils.js',import.meta.url),'utf8');
+ const direct=rules.thresholds_cad.eligible_direct_deposit;
+ const exchange=rules.thresholds_cad.eligible_exchange;
+ for(const [threshold,expected] of [[direct.Blue,200000],[direct.Bright,20000],[exchange.Blue,100000],[exchange.Bright,10000]])
+  assert.equal(threshold*100,expected);
+ assert.match(source,/total\.direct>=200000\|\|total\.exchange>=100000/);
+ assert.match(source,/total\.direct>=20000\|\|total\.exchange>=10000/);
+});
