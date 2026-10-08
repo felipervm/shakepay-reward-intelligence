@@ -1,31 +1,36 @@
-# Shakepay — Reward Eligibility Intelligence
+# What counts toward Blue?
 
-Independent research and technical proof-of-work by **Felipe Mattos**.
+An independent Shakepay product and data study by Felipe Mattos.
 
-**Question:** When a paycheque arrives but a reward does not appear as expected, how could a team distinguish an ineligible event, a classification ambiguity and a genuine discrepancy?
+**Question:** How can a team explain a transaction's contribution to reward status and separate expected exclusions, incomplete information and a status difference to review?
 
-**Study:** https://felipervm.github.io/shakepay-reward-intelligence/
+[Read the study](https://felipervm.github.io/shakepay-reward-intelligence/) · [Sources and method](https://felipervm.github.io/shakepay-reward-intelligence/docs/method.html) · [Executed analysis](https://felipervm.github.io/shakepay-reward-intelligence/docs/analysis.html)
 
-The website has a chapter-based fullscreen navigation and a simplified interactive eligibility demonstration. It is independent, not affiliated with Shakepay, and not a consulting pitch. I built it to demonstrate how I approach product/data questions while interested in working at the company.
+The study uses public guidance and clearly labeled synthetic scenarios. It does not diagnose Shakepay production systems or estimate business impact. I made it because I am interested in working at Shakepay.
 
-### Repository
-- `index.html`, `site/styles.css`, `site/script.js`: static GitHub Pages site.
-- `model.py`: simplified public-rule eligibility engine.
-- `rules/reward_status_v1.json`: illustrative versioned rule assumptions.
-- `analysis.py`: deterministic synthetic dataset generator.
-- `tests/test_model.py`: model unit tests.
-- `sql/eligibility_audit.sql`: reconciliation queries.
-- `notebooks/analysis.ipynb`: reproducible notebook.
-- `docs/RESEARCH_AND_METHOD.md`: evidence, boundaries and evaluation plan.
+## What's included
 
-### Run
+- Six authored scenarios with independently specified answers and per-event review reasons.
+- Python model with exact cents, audit-date filtering, monthly qualification and carryover.
+- SQLite computation from events, independent of Python's calculated tiers.
+- Executed notebook and HTML report, deterministic fixture, Python and JavaScript tests.
+- Responsive static site with an editable multi-event demo and linked public sources.
+
+## Reproduce
+
+Python 3.10+ and Node.js 18+ are sufficient. No installed packages are needed for the scripts or tests.
+
 ```bash
 python analysis.py
 python -m unittest discover -s tests -v
+npm test
 python -m http.server 8000
 ```
-Open http://localhost:8000/.
 
-**Reproducibility note:** this repository contains a rebuilt model and deterministic generator for the public portfolio study. The previously prepared original analytical package and image assets are not byte-for-byte copies here. Generated records and summary numbers are synthetic, not real Shakepay operations data. The website's figures denote synthetic design inputs, not proven issues or measured business impact.
+Open http://localhost:8000/. Jupyter is optional; see requirements.txt. The notebook assumes its working directory is notebooks/.
 
-Author: Felipe Mattos · October 2026.
+## Scope
+
+A single public-rule snapshot checked October 8, 2026, for personal accounts. Dates are agreed eligibility-effective calendar dates, not raw processing timestamps. Classification truth, reversals, settlement history, account restrictions and automatic historical policy selection are outside scope. Unknown classification gets an incomplete-data assessment. A known status difference requests review, not an automatic account correction.
+
+The larger fixture has 300 accounts and 1,774 events. Its 45 deliberately altered statuses are design inputs, not detected issues. Python and SQL recompute the same expected tiers independently. These artifacts demonstrate the proposed reasoning and implementation, not access to Shakepay data.

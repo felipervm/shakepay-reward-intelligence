@@ -1,5 +1,5 @@
 {
-  "version": "research-demo-v1",
+  "version": "research-demo-v2",
   "as_of": "2026-10-08",
   "jurisdiction": "Canada",
   "disclaimer": "Simplified public-rule interpretation for education. Actual product conditions and approved classifications can differ.",
@@ -20,8 +20,15 @@
   ],
   "excluded_kinds": [
     "etransfer",
-    "internal_transfer"
+    "internal_transfer",
+    "crypto_deposit"
   ],
   "tier_duration": "qualification month and following calendar month",
-  "reference": "https://help.shakepay.com/en/articles/13067281-what-are-the-shakepay-reward-statuses"
+  "reference": "https://help.shakepay.com/en/articles/13067281-what-are-the-shakepay-reward-statuses",
+  "date_semantics": "Agreed eligibility-effective calendar dates; raw timestamp conversion is outside scope",
+  "effective_rule_selection": "Single snapshot, not automatic historical version selection",
+  "references": [
+    "https://help.shakepay.com/en/articles/13067281-what-are-the-shakepay-reward-statuses",
+    "https://legal.shakepay.com/master/rewards"
+  ]
 }

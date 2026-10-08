@@ -15,4 +15,22 @@ class Rewards(unittest.TestCase):
     def test_not_settled(self): self.assertEqual(expected_tier([e("payroll",2000,settled=False)],"2026-10-10"),"Base")
     def test_reconcile(self): self.assertTrue(reconcile([e("payroll",2000)],"Bright","2026-10-10")["mismatch"])
     def test_aggregation(self): self.assertEqual(earned_tier([e("payroll",100),e("pension",100)],2026,10),"Bright")
+    def test_future_event(self): self.assertEqual(expected_tier([e("payroll",2000,"2026-10-28")],"2026-10-08"),"Base")
+    def test_before_and_on_qualification(self):
+        events=[e("payroll",2000,"2026-10-08")]
+        self.assertEqual(expected_tier(events,"2026-10-07"),"Base")
+        self.assertEqual(expected_tier(events,"2026-10-08"),"Blue")
+    def test_year_rollover(self): self.assertEqual(expected_tier([e("payroll",2000,"2025-12-31")],"2026-01-01"),"Blue")
+    def test_categories_not_combined(self): self.assertEqual(expected_tier([e("payroll",150),e("exchange",50)],"2026-10-08"),"Base")
+    def test_exact_cents(self): self.assertEqual(expected_tier([e("payroll","199.90"),e("pension","0.10")],"2026-10-08"),"Bright")
+    def test_unknown_not_called_bug(self):
+        result=reconcile([e("unknown",2000)],"Base","2026-10-08")
+        self.assertEqual(result["assessment"],"INCOMPLETE_DATA")
+        self.assertIsNone(result["mismatch"])
+    def test_missing_settlement_not_assumed(self):
+        event=e("payroll",2000);event.pop("settled")
+        self.assertEqual(expected_tier([event],"2026-10-08"),"Base")
+    def test_invalid_money(self):
+        for amount in ["NaN","Infinity","-1","1.001"]:
+            with self.assertRaises(ValueError): expected_tier([e("payroll",amount)],"2026-10-08")
 if __name__=="__main__":unittest.main()

@@ -1,0 +1,2 @@
+# Optional: only needed to open the notebook interactively.
+jupyter>=1,<2

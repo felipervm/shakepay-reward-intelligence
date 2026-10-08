@@ -1,0 +1,123 @@
+[
+  {
+    "id": "split",
+    "title": "Two deposits, one monthly total",
+    "as_of": "2026-10-08",
+    "events": [
+      {
+        "kind": "payroll",
+        "amount_cad": "1000",
+        "date": "2026-10-01",
+        "settled": true,
+        "classification_confirmed": true
+      },
+      {
+        "kind": "payroll",
+        "amount_cad": "1000",
+        "date": "2026-10-08",
+        "settled": true,
+        "classification_confirmed": true
+      }
+    ],
+    "observed": "Blue",
+    "expected": "Blue",
+    "assessment": "MATCH",
+    "explanation": "Both effective deposits count in October. Together they reach CAD 2,000.",
+    "next_step": "Explain the two contributions; no status difference in this scenario."
+  },
+  {
+    "id": "excluded",
+    "title": "Money arrived, but by e-Transfer",
+    "as_of": "2026-10-08",
+    "events": [
+      {
+        "kind": "etransfer",
+        "amount_cad": "2000",
+        "date": "2026-10-01",
+        "settled": true,
+        "classification_confirmed": true
+      }
+    ],
+    "observed": "Base",
+    "expected": "Base",
+    "assessment": "MATCH",
+    "explanation": "The transfer is excluded from this status rule, regardless of amount.",
+    "next_step": "Explain the excluded payment type, without suggesting extra trading."
+  },
+  {
+    "id": "carryover",
+    "title": "September qualification carries into October",
+    "as_of": "2026-10-01",
+    "events": [
+      {
+        "kind": "payroll",
+        "amount_cad": "2000",
+        "date": "2026-09-30",
+        "settled": true,
+        "classification_confirmed": true
+      }
+    ],
+    "observed": "Blue",
+    "expected": "Blue",
+    "assessment": "MATCH",
+    "explanation": "A qualifying September deposit carries Blue through October.",
+    "next_step": "Show the qualification month and carryover end date."
+  },
+  {
+    "id": "future",
+    "title": "A deposit after the cutoff does not count yet",
+    "as_of": "2026-10-08",
+    "events": [
+      {
+        "kind": "payroll",
+        "amount_cad": "2000",
+        "date": "2026-10-28",
+        "settled": true,
+        "classification_confirmed": true
+      }
+    ],
+    "observed": "Base",
+    "expected": "Base",
+    "assessment": "MATCH",
+    "explanation": "The October 28 event is after this October 8 snapshot. Its contribution is zero here.",
+    "next_step": "Compare status at the right effective date, not the full month."
+  },
+  {
+    "id": "unknown",
+    "title": "Classification is unresolved",
+    "as_of": "2026-10-08",
+    "events": [
+      {
+        "kind": "unknown",
+        "amount_cad": "2000",
+        "date": "2026-10-01",
+        "settled": true,
+        "classification_confirmed": false
+      }
+    ],
+    "observed": "Base",
+    "expected": "Base",
+    "assessment": "INCOMPLETE_DATA",
+    "explanation": "The payment type is unconfirmed. A status difference cannot be established from this input.",
+    "next_step": "Confirm the payment classification before deciding whether status needs review."
+  },
+  {
+    "id": "difference",
+    "title": "Confirmed inputs, different observed status",
+    "as_of": "2026-10-08",
+    "events": [
+      {
+        "kind": "payroll",
+        "amount_cad": "2000",
+        "date": "2026-10-01",
+        "settled": true,
+        "classification_confirmed": true
+      }
+    ],
+    "observed": "Bright",
+    "expected": "Blue",
+    "assessment": "STATUS_REVIEW",
+    "explanation": "Known eligible inputs indicate Blue, while the simulated observed status is Bright.",
+    "next_step": "Review effective timestamps, current policy and status history. This is not a confirmed bug."
+  }
+]

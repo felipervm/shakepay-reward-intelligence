@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "as_of": "2026-10-08",
+  "accounts": 300,
+  "events": 1774,
+  "injected_status_differences": 45,
+  "python_sql_agreement": 300,
+  "future_events": 0,
+  "interpretation": "Fixture validation, not error rate or business impact"
+}
