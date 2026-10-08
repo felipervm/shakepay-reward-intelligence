@@ -1,0 +1,60 @@
+[
+  {
+    "id": "status",
+    "url": "https://help.shakepay.com/en/articles/13067281-what-are-the-shakepay-reward-statuses",
+    "kind": "official",
+    "checked": "2026-10-08",
+    "supports": [
+      "thresholds",
+      "eligible and excluded types",
+      "existing profile status/progress"
+    ],
+    "does_not_establish": [
+      "transaction-level UI gap",
+      "defect prevalence"
+    ]
+  },
+  {
+    "id": "terms",
+    "url": "https://legal.shakepay.com/master/rewards",
+    "kind": "official",
+    "checked": "2026-10-08",
+    "supports": [
+      "immediate qualification",
+      "monthly carryover",
+      "separate thresholds"
+    ],
+    "does_not_establish": [
+      "raw bank timestamp mapping",
+      "private exceptions"
+    ]
+  },
+  {
+    "id": "autobuy",
+    "url": "https://help.shakepay.com/en/articles/14040432-0-spread-on-bitcoin-recurring-buys-and-payroll-auto-buys",
+    "kind": "official",
+    "checked": "2026-10-08",
+    "supports": [
+      "payroll-coded trigger differs from status eligibility"
+    ],
+    "does_not_establish": [
+      "all other auto-buy conditions modeled"
+    ]
+  },
+  {
+    "id": "discussion",
+    "url": "https://www.reddit.com/r/shakepay/comments/1tbcd2k/considering_using_direct_deposit_anyone_have/",
+    "kind": "customer anecdote",
+    "checked": "2026-10-08",
+    "supports": [
+      "reported coding concern",
+      "positive experiences in same thread"
+    ],
+    "does_not_establish": [
+      "cause",
+      "resolution",
+      "frequency",
+      "historical entitlement"
+    ]
+  }
+]

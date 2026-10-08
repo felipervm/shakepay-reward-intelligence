@@ -31,7 +31,7 @@ for n in range(1, 301):
                     "observed_tier": observed, "mismatch": int(tier != observed)})
 for name, rows in [("synthetic_events.csv", events), ("synthetic_reconciliation.csv", results)]:
     with (DATA/name).open("w", newline="", encoding="utf8") as file:
-        writer = csv.DictWriter(file, fieldnames=rows[0].keys())
+        writer = csv.DictWriter(file, fieldnames=rows[0].keys(), lineterminator="\n")
         writer.writeheader(); writer.writerows(rows)
 conn = sqlite3.connect(":memory:")
 conn.execute("CREATE TABLE events(account_id TEXT, event_id TEXT, event_date TEXT, kind TEXT, amount_cents INTEGER, settled INTEGER)")

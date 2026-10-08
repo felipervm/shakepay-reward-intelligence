@@ -21,3 +21,7 @@ test('browser threshold constants agree with published JSON snapshot',()=>{
  assert.match(source,/total\.direct>=200000\|\|total\.exchange>=100000/);
  assert.match(source,/total\.direct>=20000\|\|total\.exchange>=10000/);
 });
+
+test('missing effectiveness needs review',()=>{assert.equal(evaluate([{date:'2026-10-01',kind:'payroll',amount_cad:'2000'}],'Base','2026-10-08').assessment,'INCOMPLETE_DATA');});
+test('small unresolved amount cannot reach a threshold',()=>{assert.equal(evaluate([{date:'2026-10-01',kind:'unknown',settled:true,amount_cad:'1'}],'Base','2026-10-08').potential_higher_tier,false);});
+test('known floor discrepancy is not masked by unknown input',()=>{const r=evaluate([{date:'2026-10-01',kind:'payroll',settled:true,amount_cad:'2000'},{date:'2026-10-01',kind:'unknown',settled:true,amount_cad:'1'}],'Base','2026-10-08');assert.equal(r.assessment,'STATUS_REVIEW');assert.equal(r.mismatch,true);});

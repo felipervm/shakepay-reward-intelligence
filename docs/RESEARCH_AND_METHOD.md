@@ -14,13 +14,13 @@ The reward-status guide and Benefits and Rewards Terms describe two independent 
 
 Payroll, pensions and supported government benefits can qualify for status. The auto-buy guidance separately requires payroll-coded deposits. A classification can therefore matter differently across products; this does not mean every received bank payment qualifies.
 
-A May 12 customer discussion reports a paycheque received without Blue, attributed by its author to employer coding. A later thread asks about a deposit delayed across the September/October boundary. Both motivate investigation; neither verifies cause, resolution, prevalence or entitlement. The latter was located through search indexing; its full thread was not independently verified in this research.
+One public discussion includes a customer reporting a paycheque received without Blue, which that customer attributes to employer coding. Other participants describe smooth deposits. This mixed, self-selected feedback is a lead for investigation, not a representative sample or verified diagnosis. The previously linked month-boundary anecdote was removed because this audit could not independently inspect the full thread. The timing logic is supported by the official terms instead.
 
 ## Model scope
 
 A single public-rule snapshot, research-demo-v2, checked October 8, 2026. The JSON labels the snapshot; it does not select historical policy versions automatically.
 
-Inputs use agreed eligibility-effective calendar dates. Conversion from raw processing timestamps, timezone determination, reversals, provisional entries, linked accounts, business accounts, special restrictions and private policy are outside scope. An event's settled flag represents effectiveness for this fixture, not a reconstruction of settlement history. Amounts use integer cents; negative amounts and fractions beyond a cent are rejected.
+Inputs use agreed eligibility-effective calendar dates. Conversion from raw processing timestamps, timezone determination, reversals, provisional entries, linked accounts, business accounts, special restrictions and private policy are outside scope. An event's settled flag represents effectiveness for this fixture, not a reconstruction of settlement history. Amounts use integer cents; the shared demo input contract accepts CAD 0 to 1,000,000 per event, with at most two decimals. Dates must use YYYY-MM-DD; flags must be boolean or null. CSV strings must be explicitly normalized. Invalid records are rejected even when dated after the cutoff.
 
 Python excludes events after the audit date. It sums confirmed eligible deposit and exchange categories separately, then takes the higher tier earned in the current and prior calendar months. Unconfirmed or unrecognized classification receives an incomplete-data assessment rather than an asserted mismatch. A confirmed minimum tier is retained; an unresolved category may increase that tier unless Blue is already confirmed. A known difference requests review; it does not identify its cause.
 
@@ -66,11 +66,17 @@ No revenue uplift, error rate or support reduction is estimated. A test might fi
 
 [Payroll auto-buy and spread guidance](https://help.shakepay.com/en/articles/14040432-0-spread-on-bitcoin-recurring-buys-and-payroll-auto-buys) — March 11, 2026; reviewed October 8.
 
-[Customer classification discussion](https://www.reddit.com/r/shakepay/comments/1tbcd2k/considering_using_direct_deposit_anyone_have/) — May 12, 2026; anecdotal signal.
+[Customer classification discussion](https://www.reddit.com/r/shakepay/comments/1tbcd2k/considering_using_direct_deposit_anyone_have/) — thread inspected October 8, 2026; anecdotal signal, including positive and negative experiences.
 
-[Customer month-boundary discussion](https://www.reddit.com/r/shakepay/comments/1wv4gwx/bank_holiday_on_sept_30_delayed_dd_was_short_8_to/) — indexed anecdotal signal; cause and resolution unverified.
 
 
 ## Implementation guardrails
 
 The Python source uses the JSON rule snapshot. The SQL and browser versions deliberately encode the same research snapshot separately, so every policy update requires synchronized changes and cross-implementation regression checks. This project does not claim full browser accessibility validation or production equivalence.
+
+
+## Final audit checks
+
+The audit suite compares Python and JavaScript across 1,500 deterministic generated scenarios, including unknown classification and missing effectiveness. For the 1,200 scenarios with confirmed classifications and known effectiveness, it also runs SQLite and compares statuses and discrepancies. Cases span year rollover, leap day, expired and future events, zero events, cents around thresholds and separate qualification paths. Hand-authored examples supply explicit expected answers; generated agreement alone is not proof of policy correctness.
+
+The published CSVs are regenerated deterministically. `python scripts/build_docs.py` executes the notebook and rebuilds both readable reports from current sources, preventing stale HTML from diverging from the method. `python scripts/verify_artifacts.py` checks stored data against the current generator and checks internal links.

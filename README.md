@@ -24,6 +24,8 @@ Python 3.10+ and Node.js 18+ are sufficient. No installed packages are needed fo
 python analysis.py
 python -m unittest discover -s tests -v
 npm test
+python scripts/build_docs.py
+python scripts/verify_artifacts.py
 ```
 
 Open the published study: https://felipervm.github.io/shakepay-reward-intelligence/
@@ -40,3 +42,5 @@ The larger fixture has 300 accounts and 1,774 events. Its 45 deliberately altere
 ## Validation boundaries
 
 The SQL reference is an independent fixture check, not a general-purpose input validator. It assumes confirmed classifications and a synchronized policy snapshot. Python and browser models share regression examples, but thresholds are repeated in SQL and JavaScript; changes to rules must update all three and be checked by tests. The website requires browser testing for layout, accessibility and interactions.
+
+The final audit adds 1,500 Python/JavaScript comparison cases; 1,200 confirmed-input cases also run through SQL. The bounded demo uses CAD 0–1,000,000 per event and explicit boolean/null flags. Missing effectiveness is unknown, not automatically an exclusion. See the method report for tier bounds and source limitations.
