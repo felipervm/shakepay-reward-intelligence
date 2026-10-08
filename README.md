@@ -31,6 +31,11 @@ Open http://localhost:8000/. Jupyter is optional; see requirements.txt. The note
 
 ## Scope
 
-A single public-rule snapshot checked October 8, 2026, for personal accounts. Dates are agreed eligibility-effective calendar dates, not raw processing timestamps. Classification truth, reversals, settlement history, account restrictions and automatic historical policy selection are outside scope. Unknown classification gets an incomplete-data assessment. A known status difference requests review, not an automatic account correction.
+A single public-rule snapshot checked October 8, 2026, for personal accounts. Dates are agreed eligibility-effective calendar dates, not raw processing timestamps. Classification truth, reversals, settlement history, account restrictions and automatic historical policy selection are outside scope. Unknown or unrecognized classification gets an incomplete-data assessment. The model reports a confirmed minimum tier and whether unresolved classification might raise that tier. A known status difference requests review, not an automatic account correction.
 
 The larger fixture has 300 accounts and 1,774 events. Its 45 deliberately altered statuses are design inputs, not detected issues. Python and SQL recompute the same expected tiers independently. These artifacts demonstrate the proposed reasoning and implementation, not access to Shakepay data.
+
+
+## Validation boundaries
+
+The SQL reference is an independent fixture check, not a general-purpose input validator. It assumes confirmed classifications and a synchronized policy snapshot. Python and browser models share regression examples, but thresholds are repeated in SQL and JavaScript; changes to rules must update all three and be checked by tests. The website requires browser testing for layout, accessibility and interactions.
