@@ -22,7 +22,7 @@ A single public-rule snapshot, research-demo-v2, checked October 8, 2026. The JS
 
 Inputs use agreed eligibility-effective calendar dates. Conversion from raw processing timestamps, timezone determination, reversals, provisional entries, linked accounts, business accounts, special restrictions and private policy are outside scope. An event's settled flag represents effectiveness for this fixture, not a reconstruction of settlement history. Amounts use integer cents; negative amounts and fractions beyond a cent are rejected.
 
-Python excludes events after the audit date. It sums confirmed eligible deposit and exchange categories separately, then takes the higher tier earned in the current and prior calendar months. Unconfirmed classification receives an incomplete-data assessment rather than an asserted mismatch. A known difference requests review; it does not identify its cause.
+Python excludes events after the audit date. It sums confirmed eligible deposit and exchange categories separately, then takes the higher tier earned in the current and prior calendar months. Unconfirmed or unrecognized classification receives an incomplete-data assessment rather than an asserted mismatch. A confirmed minimum tier is retained; an unresolved category may increase that tier unless Blue is already confirmed. A known difference requests review; it does not identify its cause.
 
 SQLite independently derives status from the event table at the same cutoff. Its fixture assumes confirmed classifications and no reversals. It applies separate sums, threshold comparisons and prior-month carryover, then joins simulated observed status. It does not import Python's computed tier. Agreement checks shared rule interpretation and implementation; it cannot validate private Shakepay policy.
 
@@ -69,3 +69,8 @@ No revenue uplift, error rate or support reduction is estimated. A test might fi
 [Customer classification discussion](https://www.reddit.com/r/shakepay/comments/1tbcd2k/considering_using_direct_deposit_anyone_have/) — May 12, 2026; anecdotal signal.
 
 [Customer month-boundary discussion](https://www.reddit.com/r/shakepay/comments/1wv4gwx/bank_holiday_on_sept_30_delayed_dd_was_short_8_to/) — indexed anecdotal signal; cause and resolution unverified.
+
+
+## Implementation guardrails
+
+The Python source uses the JSON rule snapshot. The SQL and browser versions deliberately encode the same research snapshot separately, so every policy update requires synchronized changes and cross-implementation regression checks. This project does not claim full browser accessibility validation or production equivalence.
