@@ -12,6 +12,8 @@ from pathlib import Path
 RULES = json.loads((Path(__file__).parent / "rules/reward_status_v1.json").read_text())
 TIERS = ["Base", "Bright", "Blue"]
 DIRECT = set(RULES["eligible_direct_deposit_kinds"])
+EXCLUDED = set(RULES["excluded_kinds"])
+KNOWN = DIRECT | EXCLUDED | {"exchange"}
 
 def calendar_date(value):
     if isinstance(value, datetime):
@@ -41,6 +43,8 @@ def classify_event(event):
     if event.get("settled") is not True or not event.get("classification_confirmed", True):
         return None, 0
     kind = event["kind"]
+    if kind not in KNOWN:
+        return None, 0
     if kind in DIRECT:
         return "eligible_direct_deposit", amount
     if kind == "exchange":
@@ -92,7 +96,7 @@ def reconcile(events, observed_tier, as_of):
             reason = "OUTSIDE_CARRYOVER"
         elif event.get("settled") is not True:
             reason = "NOT_EFFECTIVE_IN_FIXTURE"
-        elif not event.get("classification_confirmed", True) or event["kind"] == "unknown":
+        elif not event.get("classification_confirmed", True) or event["kind"] not in KNOWN:
             reason = "CLASSIFICATION_REVIEW"
             uncertain = True
         else:
@@ -104,13 +108,17 @@ def reconcile(events, observed_tier, as_of):
                         "category": category, "reason": reason})
     expected = expected_tier(events, cutoff)
     mismatch = None if uncertain else expected != observed_tier
+    # A classification review cannot negate a tier already earned by confirmed events.
+    confirmed_floor = expected
+    potential_higher = uncertain and expected != "Blue"
     action = ("Confirm classification before comparing status" if uncertain else
               "Review effective dates, rule version and observed status" if mismatch else
               "Explain eligible contributions and carryover; no difference in this fixture")
     return {"as_of": cutoff.isoformat(), "rule_version": RULES["version"],
             "expected_tier": expected, "observed_tier": observed_tier,
             "assessment": "INCOMPLETE_DATA" if uncertain else "STATUS_REVIEW" if mismatch else "MATCH",
-            "mismatch": mismatch, "action": action, "events": details}
+            "mismatch": mismatch, "confirmed_floor": confirmed_floor,
+            "potential_higher_tier": potential_higher, "action": action, "events": details}
 
 if __name__ == "__main__":
     demo = [{"date": "2026-10-01", "kind": "payroll", "amount_cad": "2000.00", "settled": True}]
