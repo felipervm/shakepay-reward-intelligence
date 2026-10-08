@@ -27,6 +27,14 @@ class Rewards(unittest.TestCase):
         result=reconcile([e("unknown",2000)],"Base","2026-10-08")
         self.assertEqual(result["assessment"],"INCOMPLETE_DATA")
         self.assertIsNone(result["mismatch"])
+    def test_unrecognized_kind_requires_review(self):
+        result=reconcile([e("new_payment_channel",2000)],"Base","2026-10-08")
+        self.assertEqual(result["assessment"],"INCOMPLETE_DATA")
+        self.assertIsNone(result["mismatch"])
+    def test_confirmed_blue_floor_with_unknown(self):
+        result=reconcile([e("payroll",2000),e("new_payment_channel",500)],"Blue","2026-10-08")
+        self.assertEqual(result["confirmed_floor"],"Blue")
+        self.assertFalse(result["potential_higher_tier"])
     def test_missing_settlement_not_assumed(self):
         event=e("payroll",2000);event.pop("settled")
         self.assertEqual(expected_tier([event],"2026-10-08"),"Base")
