@@ -1,0 +1,27 @@
+{
+  "version": "research-demo-v1",
+  "as_of": "2026-10-08",
+  "jurisdiction": "Canada",
+  "disclaimer": "Simplified public-rule interpretation for education. Actual product conditions and approved classifications can differ.",
+  "thresholds_cad": {
+    "eligible_direct_deposit": {
+      "Bright": 200,
+      "Blue": 2000
+    },
+    "eligible_exchange": {
+      "Bright": 100,
+      "Blue": 1000
+    }
+  },
+  "eligible_direct_deposit_kinds": [
+    "payroll",
+    "pension",
+    "government_benefit"
+  ],
+  "excluded_kinds": [
+    "etransfer",
+    "internal_transfer"
+  ],
+  "tier_duration": "qualification month and following calendar month",
+  "reference": "https://help.shakepay.com/en/articles/13067281-what-are-the-shakepay-reward-statuses"
+}
